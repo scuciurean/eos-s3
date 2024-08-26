@@ -1,0 +1,3 @@
+[submodule "app/embedded/qorc-sdk"]
+	path = app/embedded/qorc-sdk
+	url = https://github.com/QuickLogic-Corp/qorc-sdk

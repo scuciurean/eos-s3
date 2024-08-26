@@ -1,0 +1,11 @@
+set_io rgb_led[0]   IO_22  # red led    G7
+set_io rgb_led[1]   IO_21  # green led  H7
+set_io rgb_led[2]   IO_18  # blue led   E8
+
+set_io PMOD_CNV     IO_8
+set_io PMOD_SCK     IO_10
+set_io PMOD_SDO     IO_7
+
+set_io PMOD_DEBUG_CNV     IO_5
+set_io PMOD_DEBUG_SCK     IO_4
+set_io PMOD_DEBUG_SDO     IO_12

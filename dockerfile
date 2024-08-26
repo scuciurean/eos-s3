@@ -12,3 +12,4 @@ WORKDIR $HOME
 COPY . $HOME
 
 RUN bash $HOME/scripts/install_tools.sh setup_f4pga_environement
+RUN bash $HOME/scripts/build.sh
