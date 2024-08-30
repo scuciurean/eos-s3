@@ -33,8 +33,9 @@ module ad7984 #(
     output wire SCK,
     input wire SDO
 );
-    localparam  CONVERSION  = 1'b0,
-                ACQUISITION = 1'b1;
+    localparam  IDLE        = 2'b00,
+                CONVERSION  = 2'b01,
+                ACQUISITION = 2'b10;
 
     reg [31:0] reg_control;
     reg [NUM_BITS-1:0] sdo_data;
@@ -47,13 +48,16 @@ module ad7984 #(
     wire [1:0] state;
     reg [7:0] sck_count;
 
+    localparam SCLK_DELAY = 8'h1;
     assign sig_enabled = reg_control[0];
     assign buffer_enable = reg_control[1];
     assign CNV = SIG_CNV && enabled;
     // sck_count > 1 for tEN
-    assign SCK = SIG_SCK && ~SIG_CNV && 1 < sck_count && sck_count <= (NUM_BITS + 1) && enabled;
-    assign state = CNV ? CONVERSION : ACQUISITION;
-    assign ADC_DATA_VALID = CNV && sample_count > 0 && sck_count == 0;
+    assign SCK = SIG_SCK && ~SIG_CNV && (SCLK_DELAY < sck_count && sck_count <= (NUM_BITS + SCLK_DELAY) )&& enabled;
+    assign state = enabled ? (CNV ? CONVERSION : ACQUISITION) : IDLE;
+    // assign ADC_DATA_VALID = 1 <= sck_count && sck_count <= 2 && enabled && sample_count > 0; // skip the first adc data valid without conversion
+    assign ADC_DATA_VALID = enabled && sample_count > 0 && state == ACQUISITION;
+    reg SIG_CNV_D;
 
     initial begin
         sample_count = 0;
@@ -65,7 +69,7 @@ module ad7984 #(
 
     always @(posedge CLK) begin
         if (sig_enabled) begin
-            if (sck_count == 0 && SIG_CNV) begin
+            if (sck_count == 0 && SIG_CNV && ~SIG_CNV_D) begin
                 enabled = 1;
             end
         end else begin
@@ -74,25 +78,22 @@ module ad7984 #(
                 enabled = 0;
             end
         end
+        SIG_CNV_D = SIG_CNV;
     end
 
-    // always @(posedge SIG_SCK) begin
-    always @(negedge SIG_SCK) begin
-        if (~SIG_CNV && 1 < sck_count && sck_count <= (NUM_BITS + 1) && enabled) begin
+    always @(posedge SIG_SCK) begin
+    // always @(negedge SIG_SCK) begin
+        if (~SIG_CNV && SCLK_DELAY <= sck_count && sck_count <= (NUM_BITS + SCLK_DELAY) && enabled) begin
         // if (~SIG_CNV && 0 < sck_count && sck_count <= (NUM_BITS + 1) && enabled) begin
             sdo_data <= {sdo_data[14:0], SDO};
             // sdo_data <= {SDO, sdo_data[15:1]};
         end
     end
 
-    // always @(posedge SCK) begin
-    //     sdo_data <= {sdo_data[14:0], SDO};
-    // end
-
     always @(posedge SIG_CNV) begin
         if (enabled) begin
             ADC_DATA[15:0] = sdo_data[15:0];
-            if (sample_count == reg_num_samples) begin
+            if (sample_count == reg_num_samples && buffer_enable) begin
                 sample_count <= 0;
             end else begin
                 sample_count <= sample_count + 1;

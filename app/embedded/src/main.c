@@ -69,23 +69,29 @@ void sdma_callback(void *handle)
 }
 
 
+uint64_t fclk_freq = F_48MHZ;
+
 void pwm_config_signals()
 {
-    uint64_t clk_freq = 12*1000*1000;
+    uint64_t clk_freq = fclk_freq;
     uint64_t clk_period = 1*1000*1000*1000 / clk_freq;
+    clk_period = 21;
 
-    uint64_t period_250_khz = 4000; //nanoseconds
-    uint64_t duty = 83 * 6; //498 ns almost 500 max
+    uint64_t period = 1700; //nanoseconds
+    uint64_t duty = 700;
 
-    uint32_t pwm_period = (period_250_khz / clk_period);
+    uint32_t pwm_period = (period / clk_period);
     uint32_t pwm_duty = (duty / clk_period);
 
-    *(uint32_t *)(PWM_PMOD_CNV_REG_DUTY) = pwm_duty * 1;
-    *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD) = pwm_period * 1;
+    pwm_duty = 28;
+    pwm_period = 48 *2;
+
+    *(uint32_t *)(PWM_PMOD_CNV_REG_DUTY) = 15;
+    *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD) = 32;
     *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 1;
 
-    *(uint32_t *)(PWM_PMOD_SCK_REG_DUTY) = 1 * 1;
-    *(uint32_t *)(PWM_PMOD_SCK_REG_PERIOD) = 2* 1;
+    *(uint32_t *)(PWM_PMOD_SCK_REG_DUTY) = 1;
+    *(uint32_t *)(PWM_PMOD_SCK_REG_PERIOD) = 2;
     *(uint32_t *)(PWM_PMOD_SCK_REG_CTRL) = 1;
 }
 
@@ -103,20 +109,24 @@ void sdma_config()
                           FB_INTERRUPT_POL_LEVEL_HIGH,
                           FB_INTERRUPT_DEST_AP_DISBLE, FB_INTERRUPT_DEST_M4_ENABLE);
 
+    S3x_Clk_Set_Rate(S3X_SDMA_CLK, HSOSC_80MHZ);
     S3x_Clk_Enable (S3X_SDMA_CLK); //temp
 }
 
 void fpga_init()
 {
+    uint32_t rate;
+    // S3x_Set_Max_Policy();
     S3x_Clk_Disable(S3X_FB_21_CLK);
     S3x_Clk_Disable(S3X_FB_16_CLK);
 
     load_fpga(sizeof(axFPGABitStream), axFPGABitStream);
     fpga_iomux_init(sizeof(axFPGAIOMuxInit), axFPGAIOMuxInit);
 
-    S3x_Clk_Enable(S3X_FB_21_CLK);
+    // rate = S3x_Clk_Set_Rate(S3X_FB_16_CLK, fclk_freq);
+    // rate = S3x_Clk_Set_Rate(S3X_FB_21_CLK, fclk_freq);
     S3x_Clk_Enable(S3X_FB_16_CLK);
-    S3x_Clk_Set_Rate(S3X_SDMA_CLK, HSOSC_72MHZ);
+    S3x_Clk_Enable(S3X_FB_21_CLK);
 }
 
 static void nvic_init(void)
@@ -133,7 +143,7 @@ void init()
     qorc_hardwareSetup();
     fpga_init();
     nvic_init();
-    pwm_config_signals();
+    // pwm_config_signals();
     sdma_config();
 }
 
@@ -178,7 +188,7 @@ void demo1()
 
 int main()
 {
-    uint32_t buff[1000];
+    int32_t buff[1024];
     uint32_t data;
 
     init();
@@ -190,8 +200,7 @@ int main()
 #endif
 
     HAL_StatusTypeDef status = HAL_OK;
-    // memset((void*)buff,1,40);
-    S3x_Clk_Set_Rate(S3X_SDMA_CLK, HSOSC_80MHZ);
+    memset((void*)buff,0,1024);
 
 	PMU->MISC_SW_WU		= PMU_MISC_SW_WU_SDMA_WU;
 	PMU->FFE_FB_PF_SW_WU = PMU_FFE_FB_PF_SW_WU_FFE_WU;
@@ -205,18 +214,39 @@ int main()
 
     uint32_t *srcPtr = (uint32_t*)AD7984_REG_DATA;
     int n = 1000;
+    int pwm_duty = 37;
+    int pwm_period = 56;
+    SDMA_ch_cfg_t chCfg = {
+        .data_size = SDMA_XFER_WORD,
+        .src_addr_inc = SDMA_ADDR_WIDTH_NOINC,
+        .dest_addr_inc = SDMA_ADDR_WIDTH_WORD,
+        .rpowerCode = 0
+
+    };
     while(1){
-        SDMA_ch_cfg_t chCfg = {
-            .data_size = SDMA_XFER_WORD,
-            .src_addr_inc = SDMA_ADDR_WIDTH_NOINC,
-            .dest_addr_inc = SDMA_ADDR_WIDTH_WORD,
-            .rpowerCode = 0
-        };
+        int a = 0;
+        *(uint32_t *)(AD7984_REG_CFG) = 0x0;
+        *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 0;
+        memset((void*)buff,0,1024 * 4);
         status = HAL_SDMA_xfer(SDMA_SRAM_CH12, srcPtr, buff, n, &chCfg);
 
-        *(uint32_t *)(AD7984_REG_BUFF_NUM_SAMPLES) = n;
-        *(uint32_t *)(AD7984_REG_CFG) = 0x3;
-        n++;
+        *(uint32_t *)(PWM_PMOD_CNV_REG_DUTY) = pwm_duty;
+        *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD) = pwm_period;
+        data = *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD);
+        // *(uint32_t *)(AD7984_REG_BUFF_NUM_SAMPLES) = n;
+        *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 1;
+        *(uint32_t *)(AD7984_REG_CFG) = 0x1;
+        // n++;
     }
     return 0;
 }
+
+// 24 mhz 41.6ns=>42ns 500ksps = 2000ns -> 2000/42=47,61=>48 clock periods
+// 48 mhz 20.8ns=>21ns                  -> 2000/21=95,2=>92 [34]
+// 48 mhz ideal 31 duty for 650 ns`
+// 34 56
+// 33 54
+
+// 15=650ns 40 24mhz
+// 32 54 48 mhz
+// 32 73 for 40 mhz

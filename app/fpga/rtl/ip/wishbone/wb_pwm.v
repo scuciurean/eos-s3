@@ -71,8 +71,8 @@ module wishbone_pwm #(
         if (WB_RST) begin
             WBS_ACK <= 0;
             WBS_RD_DAT <= 32'h0;
-            period <= 32'h0000FFFF;
-            duty_cycle <= 32'h00008000;
+            period <= 32'h0;
+            duty_cycle <= 32'h0;
             cfg <= 0;
         end else begin
             if (WBS_CYC && WBS_STB && ~WBS_ACK) begin  // Write operation

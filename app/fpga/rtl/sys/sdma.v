@@ -46,7 +46,8 @@ module sdma #(
             if (~ram_written) begin
                 sdma_req =1;
                 ram_written = 1;
-            end else if (delay == 3) begin
+            end else if (delay == 10) begin
+            // end else begin
                 sdma_req = 0;
             end
         end else begin

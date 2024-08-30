@@ -93,13 +93,13 @@ wire ADC_DATA_VALID;
 
 // Fabric clock reset buffer
 gclkbuff buff_reset (
-    .A(Clk_C16_Rst | WB_RST),
+    .A(Clk_C21_Rst | WB_RST),
     .Z(WB_RST_FPGA)
 );
 
 // Fabric clock buffer
 gclkbuff buff_clock (
-    .A(Clk_C16),
+    .A(Clk_C21),
     .Z(WB_CLK)
 );
 
@@ -134,70 +134,70 @@ wishbone_interconnect #(
     .SLAVE_BASE_ADDRESSES(SLAVE_BASE_ADDR)
 );
 
-// GPIO controller 0
-wishbone_gpio #(
-    .ADDR_WIDTH(WB_ADDR_WIDTH),
-    .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
-    .DATA_WIDTH(DATA_WIDTH)
-) gpio_blue_led (
-    .WB_CLK(WB_CLK),
-    .WB_RST(WB_RST_FPGA),
-    .WBS_CYC(WBS_CYC[0]),
-    .WBS_WE(WBS_WE[0]),
-    .WBS_RD(WBS_RD[0]),
-    .WBS_WR_DAT(WBS_WR_DAT),
-    .WBS_STB(WBS_STB[0]),
-    .WBS_BYTE_STB(WBS_BYTE_STB),
-    .WBS_ADR(WBS_ADR),
-    .WBS_RD_DAT(WBS_RD_DAT[1*DATA_WIDTH-1:(1-1)*DATA_WIDTH]),
-    .WBS_ACK(WBS_ACK[0]),
+// // GPIO controller 0
+// wishbone_gpio #(
+//     .ADDR_WIDTH(WB_ADDR_WIDTH),
+//     .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
+//     .DATA_WIDTH(DATA_WIDTH)
+// ) gpio_blue_led (
+//     .WB_CLK(WB_CLK),
+//     .WB_RST(WB_RST_FPGA),
+//     .WBS_CYC(WBS_CYC[0]),
+//     .WBS_WE(WBS_WE[0]),
+//     .WBS_RD(WBS_RD[0]),
+//     .WBS_WR_DAT(WBS_WR_DAT),
+//     .WBS_STB(WBS_STB[0]),
+//     .WBS_BYTE_STB(WBS_BYTE_STB),
+//     .WBS_ADR(WBS_ADR),
+//     .WBS_RD_DAT(WBS_RD_DAT[1*DATA_WIDTH-1:(1-1)*DATA_WIDTH]),
+//     .WBS_ACK(WBS_ACK[0]),
 
-    .GPIO_IO(gpio_controller0_io)
-);
+//     .GPIO_IO(gpio_controller0_io)
+// );
 
-// GPIO controller 1
-wishbone_gpio #(
-    .ADDR_WIDTH(WB_ADDR_WIDTH),
-    .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
-    .DATA_WIDTH(DATA_WIDTH)
-) gpio_green_led (
-    .WB_CLK(WB_CLK),
-    .WB_RST(WB_RST_FPGA),
-    .WBS_CYC(WBS_CYC[1]),
-    .WBS_WE(WBS_WE[1]),
-    .WBS_RD(WBS_RD[1]),
-    .WBS_WR_DAT(WBS_WR_DAT),
-    .WBS_STB(WBS_STB[1]),
-    .WBS_BYTE_STB(WBS_BYTE_STB),
-    .WBS_ADR(WBS_ADR),
-    .WBS_RD_DAT(WBS_RD_DAT[2*DATA_WIDTH-1:(2-1)*DATA_WIDTH]),
-    .WBS_ACK(WBS_ACK[1]),
+// // GPIO controller 1
+// wishbone_gpio #(
+//     .ADDR_WIDTH(WB_ADDR_WIDTH),
+//     .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
+//     .DATA_WIDTH(DATA_WIDTH)
+// ) gpio_green_led (
+//     .WB_CLK(WB_CLK),
+//     .WB_RST(WB_RST_FPGA),
+//     .WBS_CYC(WBS_CYC[1]),
+//     .WBS_WE(WBS_WE[1]),
+//     .WBS_RD(WBS_RD[1]),
+//     .WBS_WR_DAT(WBS_WR_DAT),
+//     .WBS_STB(WBS_STB[1]),
+//     .WBS_BYTE_STB(WBS_BYTE_STB),
+//     .WBS_ADR(WBS_ADR),
+//     .WBS_RD_DAT(WBS_RD_DAT[2*DATA_WIDTH-1:(2-1)*DATA_WIDTH]),
+//     .WBS_ACK(WBS_ACK[1]),
 
-    .GPIO_IO(gpio_controller1_io)
-);
+//     .GPIO_IO(gpio_controller1_io)
+// );
 
-wishbone_pwm #(
-    .ADDR_WIDTH(WB_ADDR_WIDTH),
-    .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
-    .DATA_WIDTH(DATA_WIDTH)
-) pwm_red_led (
-    .CLK(WB_CLK),
-    .RST(WB_RST_FPGA),
+// wishbone_pwm #(
+//     .ADDR_WIDTH(WB_ADDR_WIDTH),
+//     .MUX_ADDR_WIDHT(WB_MUX_ADDR_WIDHT),
+//     .DATA_WIDTH(DATA_WIDTH)
+// ) pwm_red_led (
+//     .CLK(WB_CLK),
+//     .RST(WB_RST_FPGA),
 
-    .WB_CLK(WB_CLK),
-    .WB_RST(WB_RST_FPGA),
-    .WBS_CYC(WBS_CYC[2]),
-    .WBS_WE(WBS_WE[2]),
-    .WBS_RD(WBS_RD[2]),
-    .WBS_WR_DAT(WBS_WR_DAT),
-    .WBS_STB(WBS_STB[2]),
-    .WBS_BYTE_STB(WBS_BYTE_STB),
-    .WBS_ADR(WBS_ADR),
-    .WBS_RD_DAT(WBS_RD_DAT[3*DATA_WIDTH-1:(3-1)*DATA_WIDTH]),
-    .WBS_ACK(WBS_ACK[2]),
+//     .WB_CLK(WB_CLK),
+//     .WB_RST(WB_RST_FPGA),
+//     .WBS_CYC(WBS_CYC[2]),
+//     .WBS_WE(WBS_WE[2]),
+//     .WBS_RD(WBS_RD[2]),
+//     .WBS_WR_DAT(WBS_WR_DAT),
+//     .WBS_STB(WBS_STB[2]),
+//     .WBS_BYTE_STB(WBS_BYTE_STB),
+//     .WBS_ADR(WBS_ADR),
+//     .WBS_RD_DAT(WBS_RD_DAT[3*DATA_WIDTH-1:(3-1)*DATA_WIDTH]),
+//     .WBS_ACK(WBS_ACK[2]),
 
-    .PWM_OUT(`RED_LED)
-);
+//     .PWM_OUT(`RED_LED)
+// );
 
 wishbone_pwm #(
     .ADDR_WIDTH(WB_ADDR_WIDTH),
@@ -266,7 +266,8 @@ ad7984 #(
     .WBS_ACK(WBS_ACK[5]),
 
     .SIG_CNV(pmod_ad7984_cnv),
-    .SIG_SCK(pmod_ad7984_sck),
+    // .SIG_SCK(pmod_ad7984_sck),
+    .SIG_SCK(WB_CLK),
 
     .CNV(PMOD_CNV),
     .SCK(PMOD_SCK),
@@ -282,8 +283,8 @@ sdma #(
     .clk(WB_CLK),
     .rst(WB_RST),
 
-    .data({16'h0, ADC_DATA}),
     .valid(ADC_DATA_VALID),
+    .data({16'h0, ADC_DATA}),
     .sdma_req(SDMA0_Req),
     .sdma_irq(SDMA0_INT),
     .sdma_done(SDMA0_Done),
