@@ -68,8 +68,7 @@ void sdma_callback(void *handle)
     return;
 }
 
-
-uint64_t fclk_freq = F_48MHZ;
+uint64_t fclk_freq = FREQ_72MHZ;
 
 void pwm_config_signals()
 {
@@ -123,6 +122,8 @@ void fpga_init()
     load_fpga(sizeof(axFPGABitStream), axFPGABitStream);
     fpga_iomux_init(sizeof(axFPGAIOMuxInit), axFPGAIOMuxInit);
 
+    // S3x_Register_Qos_Node(S3X_FB_16_CLK);
+    // S3x_Set_Qos_Req(S3X_FB_16_CLK, MIN_HSOSC_FREQ, HSOSC_72MHZ);
     // rate = S3x_Clk_Set_Rate(S3X_FB_16_CLK, fclk_freq);
     // rate = S3x_Clk_Set_Rate(S3X_FB_21_CLK, fclk_freq);
     S3x_Clk_Enable(S3X_FB_16_CLK);
@@ -224,29 +225,17 @@ int main()
 
     };
     while(1){
-        int a = 0;
-        *(uint32_t *)(AD7984_REG_CFG) = 0x0;
-        *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 0;
         memset((void*)buff,0,1024 * 4);
         status = HAL_SDMA_xfer(SDMA_SRAM_CH12, srcPtr, buff, n, &chCfg);
 
         *(uint32_t *)(PWM_PMOD_CNV_REG_DUTY) = pwm_duty;
         *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD) = pwm_period;
         data = *(uint32_t *)(PWM_PMOD_CNV_REG_PERIOD);
-        // *(uint32_t *)(AD7984_REG_BUFF_NUM_SAMPLES) = n;
+        *(uint32_t *)(AD7984_REG_BUFF_NUM_SAMPLES) = n;
         *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 1;
         *(uint32_t *)(AD7984_REG_CFG) = 0x1;
-        // n++;
+        *(uint32_t *)(AD7984_REG_CFG) = 0x0;
+        *(uint32_t *)(PWM_PMOD_CNV_REG_CTRL) = 0;
     }
     return 0;
 }
-
-// 24 mhz 41.6ns=>42ns 500ksps = 2000ns -> 2000/42=47,61=>48 clock periods
-// 48 mhz 20.8ns=>21ns                  -> 2000/21=95,2=>92 [34]
-// 48 mhz ideal 31 duty for 650 ns`
-// 34 56
-// 33 54
-
-// 15=650ns 40 24mhz
-// 32 54 48 mhz
-// 32 73 for 40 mhz

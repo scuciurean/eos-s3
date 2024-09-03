@@ -6,14 +6,16 @@ SRCS = \
 	rtl/sys/sdma.v \
 	rtl/top.v
 
-CONSTRAINTS = rtl/constraints.pcf
+PCF = rtl/pinout.pcf
+SDC = rtl/timing.sdc
 
 QL_FLAGS= \
 	-d ql-eos-s3 \
 	-P PU64 \
 	-t top \
 	-v $(SRCS) \
-	-p $(CONSTRAINTS)
+	-p $(PCF) \
+	-s $(SDC)
 
 all:
 	ql_symbiflow -compile $(QL_FLAGS) -dump binary -dump header -dump jlink -dump header

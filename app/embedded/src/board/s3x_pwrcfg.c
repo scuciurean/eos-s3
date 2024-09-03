@@ -79,10 +79,8 @@ S3x_ClkD S3clk [] = {
         .type = SRC_CLK,
         .sync_clk = SYNC_CLKD (0, 0, 0),
         .cru_ctrl = CRU_CTRL (0x20, 0x1fe, 9, 0x24, 0x64, 0x01, 5),
-        .def_max_rate = (F_24MHZ),
-        //.init_state = INIT_STATE(F_18MHZ, 1, INIT_GATE_ON),
-        //.init_state = INIT_STATE(F_6MHZ, 1, INIT_GATE_OFF),
-        .init_state = INIT_STATE(F_12MHZ, 1, INIT_GATE_OFF),
+        .def_max_rate = (F_72MHZ),
+        .init_state = INIT_STATE(F_54MHZ, 1, INIT_GATE_ON),
     },
     [CLK_C30] = {
         .name = "C30",
@@ -111,8 +109,7 @@ S3x_ClkD S3clk [] = {
         .sync_clk = SYNC_CLKD (0, 0, 0),
         .cru_ctrl = CRU_CTRL (0x34, 0x1fe, 9, 0x38, 0x70, 0x1, 8),
         .def_max_rate = (F_72MHZ),
-        //.init_state = INIT_STATE(F_3MHZ, 1, INIT_GATE_OFF),
-        .init_state = INIT_STATE(F_54MHZ, 1, INIT_GATE_OFF),
+        .init_state = INIT_STATE(F_54MHZ, 1, INIT_GATE_ON),
     },
     [CLK_C01] = {
         .name = "C1",

@@ -9,3 +9,4 @@ set_io PMOD_SDO     IO_7
 set_io PMOD_DEBUG_CNV     IO_5
 set_io PMOD_DEBUG_SCK     IO_4
 set_io PMOD_DEBUG_SDO     IO_12
+

@@ -1,0 +1,118 @@
+[*]
+[*] GTKWave Analyzer v3.3.116 (w)1999-2023 BSI
+[*] Fri Aug 30 14:29:42 2024
+[*]
+[dumpfile] "./tb_system.vcd"
+[dumpfile_mtime] "Fri Aug 30 12:15:56 2024"
+[dumpfile_size] 53500
+[savefile] "./cfg.gtkw"
+[timestart] 0
+[size] 1920 1001
+[pos] -1 -1
+*-19.593309 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_system.
+[treeopen] tb_system.DUT.
+[sst_width] 40
+[signals_width] 211
+[sst_expanded] 0
+[sst_vpaned_height] 601
+@28
+tb_system.clk
+tb_system.rst
+@200
+-
+@22
+[color] 3
+tb_system.WB_ADR[16:0]
+[color] 3
+tb_system.WB_WR_DAT[31:0]
+@28
+[color] 3
+tb_system.WB_WE
+[color] 3
+tb_system.WB_ACK
+@200
+-
+@22
+tb_system.DUT.pwm_pmod_cnv.duty_cycle[31:0]
+tb_system.DUT.pwm_pmod_cnv.period[31:0]
+@28
+tb_system.DUT.pwm_pmod_cnv.PWM_OUT
+@200
+-
+@28
+tb_system.DUT.pmod_ad7984.SIG_SCK
+tb_system.DUT.pmod_ad7984.SIG_CNV
+@200
+-
+@28
+tb_system.DUT.pmod_ad7984.CNV
+tb_system.DUT.pmod_ad7984.SCK
+[color] 1
+tb_system.DUT.pmod_ad7984.sig_enabled
+[color] 1
+tb_system.DUT.pmod_ad7984.enabled
+[color] 1
+tb_system.DUT.pmod_ad7984.buffer_enable
+@c00022
+tb_system.sample_data[15:0]
+@28
+(0)tb_system.sample_data[15:0]
+(1)tb_system.sample_data[15:0]
+(2)tb_system.sample_data[15:0]
+(3)tb_system.sample_data[15:0]
+(4)tb_system.sample_data[15:0]
+(5)tb_system.sample_data[15:0]
+(6)tb_system.sample_data[15:0]
+(7)tb_system.sample_data[15:0]
+(8)tb_system.sample_data[15:0]
+(9)tb_system.sample_data[15:0]
+(10)tb_system.sample_data[15:0]
+(11)tb_system.sample_data[15:0]
+(12)tb_system.sample_data[15:0]
+(13)tb_system.sample_data[15:0]
+(14)tb_system.sample_data[15:0]
+(15)tb_system.sample_data[15:0]
+@1401200
+-group_end
+@c00023
+tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+@29
+(0)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(1)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(2)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(3)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(4)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(5)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(6)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(7)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(8)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(9)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(10)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(11)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(12)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(13)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(14)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+(15)tb_system.DUT.pmod_ad7984.sdo_data[15:0]
+@1401201
+-group_end
+@28
+[color] 1
+tb_system.DUT.pmod_ad7984.ADC_DATA_VALID
+@22
+tb_system.DUT.pmod_ad7984.sample_count[31:0]
+@28
+tb_system.DUT.SDO
+@22
+tb_system.DUT.pmod_ad7984.sck_count[7:0]
+tb_system.DUT.pmod_ad7984.ADC_DATA[15:0]
+tb_system.DUT.pmod_ad7984.sample_count[31:0]
+@28
+[color] 5
+tb_system.DUT.pmod_ad7984.state[1:0]
+tb_system.DUT.sdma_ad7894.sdma_active
+tb_system.DUT.sdma_ad7894.sdma_done
+tb_system.DUT.sdma_ad7894.sdma_irq
+tb_system.DUT.sdma_ad7894.sdma_req
+[pattern_trace] 1
+[pattern_trace] 0

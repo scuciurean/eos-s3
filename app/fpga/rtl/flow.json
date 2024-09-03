@@ -1,0 +1,32 @@
+{
+    "default_part": "EOS3FF512-PDN64",
+    "values": {
+        "top": "top"
+    },
+    "dependencies": {
+        "sources": [
+            "./ip/wishbone/wb_interconnect.v",
+            "./ip/wishbone/wb_gpio.v",
+            "./ip/wishbone/wb_pwm.v",
+            "./ip/ad7984/ad7984.v",
+            "./sys/sdma.v",
+            "./top.v"
+        ],
+        "synth_log": "synth.log",
+        "pack_log": "pack.log",
+        "analysis_log": "analysis.log"
+    },
+    "EOS3FF512-PDN64": {
+        "default_target": "bitstream",
+        "dependencies": {
+            "build_dir": "build",
+            "pcf": "./pinout.pcf",
+            "sdc-in": "./timing.sdc"
+        },
+        "values": {
+            "part": "ql-eos-s3",
+            "package": "PD64"
+        }
+    }
+}
+
