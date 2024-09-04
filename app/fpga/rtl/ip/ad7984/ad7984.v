@@ -4,7 +4,7 @@
 
 module ad7984 #(
     parameter NUM_BITS = 16,
-    parameter MUX_ADDR_WIDHT = 9,
+    parameter MUX_ADDR_WIDTH = 9,
     parameter ADDR_WIDTH = 17,
     parameter DATA_WIDTH = 32
 )(
@@ -17,7 +17,7 @@ module ad7984 #(
     input  wire [DATA_WIDTH-1:0] WBS_WR_DAT,                // Wishbone Write Data
     input  wire [3:0]            WBS_BYTE_STB,              // Wishbone Byte Enable Strobe
     input  wire                  WBS_STB,
-    input  wire [ADDR_WIDTH - MUX_ADDR_WIDHT-1:0] WBS_ADR,  // Wishbone Address : 4 registers
+    input  wire [ADDR_WIDTH - MUX_ADDR_WIDTH-1:0] WBS_ADR,  // Wishbone Address : 4 registers
     input  wire                  WB_CLK,                    // Wishbone Clock
     input  wire                  WB_RST,                    // Wishbone Reset
     output reg  [DATA_WIDTH-1:0] WBS_RD_DAT,                // Wishbone Read Data
@@ -132,13 +132,13 @@ module ad7984 #(
                             if (WBS_BYTE_STB[0]) reg_control[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) reg_control[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) reg_control[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) reg_control[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) reg_control[31:24] <= WBS_WR_DAT[31:24];
                         end
                         `AD7984_REG_BUFF_NSAMPLES: begin
                             if (WBS_BYTE_STB[0]) reg_num_samples[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) reg_num_samples[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) reg_num_samples[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) reg_num_samples[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) reg_num_samples[31:24] <= WBS_WR_DAT[31:24];
                         end
                     endcase
                 end

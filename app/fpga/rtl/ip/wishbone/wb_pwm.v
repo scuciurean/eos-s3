@@ -4,7 +4,7 @@
 
 
 module wishbone_pwm #(
-    parameter MUX_ADDR_WIDHT = 9,
+    parameter MUX_ADDR_WIDTH = 9,
     parameter ADDR_WIDTH = 17,
     parameter DATA_WIDTH = 32
 )(
@@ -16,7 +16,7 @@ module wishbone_pwm #(
     input  wire [DATA_WIDTH-1:0] WBS_WR_DAT,                // Wishbone Write Data
     input  wire [3:0]            WBS_BYTE_STB,              // Wishbone Byte Enable Strobe
     input  wire                  WBS_STB,
-    input  wire [ADDR_WIDTH - MUX_ADDR_WIDHT-1:0] WBS_ADR,  // Wishbone Address : 4 registers
+    input  wire [ADDR_WIDTH - MUX_ADDR_WIDTH-1:0] WBS_ADR,  // Wishbone Address : 4 registers
     input  wire                  WB_CLK,                    // Wishbone Clock
     input  wire                  WB_RST,                    // Wishbone Reset
     output reg  [DATA_WIDTH-1:0] WBS_RD_DAT,                // Wishbone Read Data
@@ -38,9 +38,9 @@ module wishbone_pwm #(
             if (cfg[0]) begin  // Bit 0: PWM Enable
 
                 if (counter < period - 1) begin
-                    counter <= counter + 1;
+                    counter = counter + 1;
                 end else begin
-                    counter <= 32'b0;
+                    counter = 32'b0;
                 end
 
                 if (counter < duty_cycle) begin
@@ -82,32 +82,32 @@ module wishbone_pwm #(
                             if (WBS_BYTE_STB[0]) cfg[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) cfg[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) cfg[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) cfg[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) cfg[31:24] <= WBS_WR_DAT[31:24];
                         end
                         `PWM_REG_DUTY: begin
                             if (WBS_BYTE_STB[0]) duty_cycle[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) duty_cycle[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) duty_cycle[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) duty_cycle[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) duty_cycle[31:24] <= WBS_WR_DAT[31:24];
                         end
                         `PWM_REG_PERIOD: begin
                             if (WBS_BYTE_STB[0]) period[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) period[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) period[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) period[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) period[31:24] <= WBS_WR_DAT[31:24];
                         end
                     endcase
                 end
                 if (~WBS_WE && WBS_RD) begin
                     case (WBS_ADR)
                         `PWM_REG_CONFIG: begin
-                            WBS_RD_DAT <= cfg;  // Return the current state of the GPIO register
+                            WBS_RD_DAT = cfg;  // Return the current state of the GPIO register
                         end
                         `PWM_REG_DUTY: begin
-                            WBS_RD_DAT <= duty_cycle;  // Return the current state of the GPIO register
+                            WBS_RD_DAT = duty_cycle;  // Return the current state of the GPIO register
                         end
                         `PWM_REG_PERIOD: begin
-                            WBS_RD_DAT <= period;  // Return the current state of the GPIO register
+                            WBS_RD_DAT = period;  // Return the current state of the GPIO register
                         end
                         default: begin
                             WBS_RD_DAT <= 32'h0;

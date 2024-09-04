@@ -4,7 +4,7 @@
 `define GPIO_REG3 8'h010  // Address for Register 3 (ignored)
 
 module wishbone_gpio #(
-    parameter MUX_ADDR_WIDHT = 9,
+    parameter MUX_ADDR_WIDTH = 9,
     parameter ADDR_WIDTH = 17,
     parameter DATA_WIDTH = 32,
 )(
@@ -14,7 +14,7 @@ module wishbone_gpio #(
     input  wire [DATA_WIDTH-1:0] WBS_WR_DAT,                // Wishbone Write Data
     input  wire [3:0]            WBS_BYTE_STB,              // Wishbone Byte Enable Strobe
     input  wire                  WBS_STB,
-    input  wire [ADDR_WIDTH - MUX_ADDR_WIDHT-1:0] WBS_ADR,  // Wishbone Address : 4 registers
+    input  wire [ADDR_WIDTH - MUX_ADDR_WIDTH-1:0] WBS_ADR,  // Wishbone Address : 4 registers
     input  wire                  WB_CLK,                    // Wishbone Clock
     input  wire                  WB_RST,                    // Wishbone Reset
     output reg  [DATA_WIDTH-1:0] WBS_RD_DAT,                // Wishbone Read Data
@@ -43,7 +43,7 @@ module wishbone_gpio #(
                             if (WBS_BYTE_STB[0]) gpio_data_reg[7:0] <= WBS_WR_DAT[7:0];
                             if (WBS_BYTE_STB[1]) gpio_data_reg[15:8] <= WBS_WR_DAT[15:8];
                             if (WBS_BYTE_STB[2]) gpio_data_reg[23:16] <= WBS_WR_DAT[23:16];
-                            if (WBS_BYTE_STB[3]) gpio_data_reg[31:23] <= WBS_WR_DAT[31:23];
+                            if (WBS_BYTE_STB[3]) gpio_data_reg[31:24] <= WBS_WR_DAT[31:24];
                         end
                         `GPIO_REG1: begin
                             if (WBS_BYTE_STB[0]) gpio_data_reg[7:0] <= ~WBS_WR_DAT[7:0];
